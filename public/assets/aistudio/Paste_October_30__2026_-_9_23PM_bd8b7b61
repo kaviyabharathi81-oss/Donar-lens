@@ -1,0 +1,2604 @@
+Build a complete, high-fidelity, multi-page web application prototype called **DONOR LENS**.
+
+Product tagline:
+
+**"See where every contribution goes."**
+
+Donor Lens is a transparent community donation and financial accountability platform designed for educational institutions, student communities, NGOs, community organizations, and officials.
+
+The system connects two experiences:
+
+1. **DONOR LENS — DONOR PORTAL**
+   For students and community donors.
+
+2. **DONOR LENS — ADMIN PORTAL**
+   For authorized officials, administrators, campaign organizers, and financial reviewers.
+
+The core concept is simple:
+
+A donor should be able to discover a campaign, contribute money, see exactly where the contribution goes, view supporting receipts, track campaign spending, and independently verify the transaction.
+
+An administrator should be able to create campaigns, verify donations, manage expenses, upload receipts, approve spending, reconcile balances, and maintain a complete audit trail.
+
+The prototype should communicate TRUST, TRANSPARENCY, ACCOUNTABILITY, and VERIFIABILITY.
+
+==================================================
+0. CRITICAL PROTOTYPE INSTRUCTION
+==================================================
+
+This is a HIGH-FIDELITY FRONTEND PROTOTYPE.
+
+Do NOT spend significant time implementing real:
+
+- Tezos smart contracts
+- blockchain wallet signing
+- production authentication
+- real IPFS infrastructure
+- real database infrastructure
+- production payment processing
+- real email/SMS systems
+
+Instead, simulate these systems convincingly using realistic deterministic mock data.
+
+The prototype must FEEL like the real application.
+
+Interactions must actually work.
+
+Buttons must not be decorative.
+
+Forms must produce state changes.
+
+Tables must update when appropriate.
+
+Approvals must change status.
+
+Donations must move from Pending → Confirmed.
+
+Verification must produce results.
+
+Campaign balances must update.
+
+The prototype should be presentation-ready.
+
+==================================================
+1. TWO DISTINCT PRODUCTS
+==================================================
+
+IMPORTANT:
+
+Do not make the donor and administrator experiences feel like the same dashboard with different buttons.
+
+They are two different interfaces sharing the same underlying data.
+
+--------------------------------------------------
+DONOR LENS — DONOR PORTAL
+--------------------------------------------------
+
+Purpose:
+
+For students and community donors.
+
+Primary tasks:
+
+- Discover campaigns
+- View upcoming campaigns
+- View campaign details
+- Donate
+- Track donations
+- View transaction history
+- Verify donations
+- View campaign spending
+- View receipts
+- Follow campaign impact
+- Manage profile
+- Manage notification preferences
+
+The donor interface should feel:
+
+- simple
+- welcoming
+- trustworthy
+- informative
+- lightweight
+- student-friendly
+
+--------------------------------------------------
+DONOR LENS — ADMIN PORTAL
+--------------------------------------------------
+
+Purpose:
+
+For authorized officials and administrators.
+
+Primary tasks:
+
+- Manage campaigns
+- Verify donations
+- Monitor incoming contributions
+- Create campaigns
+- Review expenses
+- Verify receipts
+- Approve/reject expenses
+- Manage multiple approvers
+- Monitor campaign balances
+- Reconcile blockchain records
+- Inspect transactions
+- Maintain audit trails
+- Detect discrepancies
+- Generate reports
+
+The admin interface should feel:
+
+- operational
+- dense
+- precise
+- professional
+- financial
+- institutional
+- trustworthy
+
+==================================================
+2. ROLE-BASED SIGNUP
+==================================================
+
+Create a proper signup/onboarding experience.
+
+Route:
+
+/signup
+
+Step 1:
+
+"Create your Donor Lens account"
+
+Fields:
+
+Full name
+Email
+Password
+
+Then ask:
+
+**"How will you use Donor Lens?"**
+
+Two large role selection cards:
+
+STUDENT / DONOR
+
+Description:
+
+"Discover community campaigns, contribute, track your donations, and verify where funds are used."
+
+ADMIN / OFFICIAL
+
+Description:
+
+"Manage campaigns, verify donations, approve expenses, and maintain financial accountability."
+
+The role selection must be visually important.
+
+When the user selects:
+
+STUDENT / DONOR
+
+→ continue to donor onboarding.
+
+When the user selects:
+
+ADMIN / OFFICIAL
+
+→ continue to admin onboarding.
+
+After signup:
+
+DONOR → /donor/dashboard
+
+ADMIN → /admin/dashboard
+
+Create realistic demo accounts.
+
+Also provide:
+
+"Continue with Demo Donor"
+
+and
+
+"Continue with Demo Admin"
+
+buttons for presentation purposes.
+
+==================================================
+3. AUTHENTICATION EXPERIENCE
+==================================================
+
+Routes:
+
+/login
+/signup
+/onboarding
+
+Login should contain:
+
+Email
+Password
+Remember me
+Forgot password
+
+Also provide:
+
+Demo Donor
+Demo Admin
+
+Do not implement real authentication.
+
+Use simulated authentication state.
+
+The selected role should persist during the prototype session.
+
+Add a small user role indicator in the navigation.
+
+==================================================
+4. BRAND IDENTITY
+==================================================
+
+Product name:
+
+DONOR LENS
+
+Use uppercase "DONOR LENS" in the brand/logo treatment.
+
+Logo concept:
+
+A minimal lens / verification mark combined with a subtle circular form.
+
+Do NOT create a generic charity heart logo.
+
+Do NOT use donation hands imagery.
+
+The logo should feel like a technology/product company.
+
+Tagline:
+
+"See where every contribution goes."
+
+Secondary brand statement:
+
+"Transparent giving. Verifiable spending."
+
+==================================================
+5. VISUAL DESIGN
+==================================================
+
+The primary visual identity is:
+
+**DEEP BLACK + NEON GREEN**
+
+Dark mode must be the primary experience.
+
+Dark background:
+
+#050706
+#080A09
+#0B0E0C
+
+Primary surface:
+
+#0D110F
+
+Secondary surface:
+
+#111612
+
+Borders:
+
+Subtle dark green-gray.
+
+Primary accent:
+
+Electric / neon green.
+
+Use neon green strategically for:
+
+- verified
+- confirmed
+- active
+- positive financial movement
+- blockchain reconciliation
+- success
+- important CTA states
+
+Do NOT make the entire application green.
+
+Neon green should feel like a verification signal.
+
+Use white / soft white for primary text.
+
+Use muted gray for secondary information.
+
+Use restrained amber for warnings.
+
+Use restrained red for failures.
+
+==================================================
+6. LIGHT MODE
+==================================================
+
+Create a complete light theme.
+
+Light background:
+
+White / extremely light blue-gray.
+
+Primary surface:
+
+#FFFFFF
+
+Secondary surface:
+
+Very light blue-gray.
+
+Primary accent:
+
+Professional blue.
+
+Text:
+
+Deep navy.
+
+Borders:
+
+Subtle blue-gray.
+
+The light theme should feel like the same product.
+
+Do not simply invert the dark theme.
+
+The light version should feel polished enough for institutional presentations.
+
+Add a global:
+
+Dark / Light
+
+theme toggle.
+
+Persist the selected theme during the session.
+
+==================================================
+7. TYPOGRAPHY
+==================================================
+
+Typography is extremely important.
+
+Avoid obvious AI-generated typography.
+
+Do not use decorative fonts.
+
+Do not use multiple unrelated font families.
+
+Use ONE primary modern grotesk / neo-grotesk font.
+
+Preferred:
+
+Inter Tight
+or
+Geist
+or
+IBM Plex Sans
+or
+Manrope
+
+Use a refined modern product typography system.
+
+Headings should be compact and confident.
+
+Do not make every heading enormous.
+
+Use:
+
+- strong financial numbers
+- compact headings
+- small uppercase metadata labels
+- readable body copy
+- tabular numerical typography
+- monospace for transaction hashes and blockchain addresses
+
+Use generous whitespace.
+
+Typography should feel closer to:
+
+Linear
+Stripe
+Vercel
+modern fintech infrastructure
+
+than:
+
+generic SaaS
+crypto dashboards
+AI-generated templates
+
+==================================================
+8. DESIGN PRINCIPLES
+==================================================
+
+Use an 8px spacing system.
+
+Border radius:
+
+6px–10px.
+
+Avoid excessive pills.
+
+Avoid giant rounded rectangles.
+
+Avoid excessive shadows.
+
+Avoid floating glass cards.
+
+Avoid excessive gradients.
+
+Avoid glassmorphism.
+
+Avoid 3D objects.
+
+Avoid stock illustrations.
+
+Avoid crypto coins.
+
+Avoid cartoon graphics.
+
+Avoid unnecessary decorative elements.
+
+Use 1px borders to structure information.
+
+Use subtle hover states.
+
+Animations:
+
+150–250ms.
+
+Keep animations functional and restrained.
+
+Use Lucide icons consistently.
+
+Do not use emoji as UI icons.
+
+==================================================
+9. GLOBAL INFORMATION ARCHITECTURE
+==================================================
+
+PUBLIC:
+
+/
+ /explore
+ /campaign/:id
+ /verify
+ /verify/:transactionId
+ /about
+
+AUTH:
+
+/login
+/signup
+/onboarding
+
+DONOR PORTAL:
+
+/donor/dashboard
+/donor/explore
+/donor/campaigns/:id
+/donor/campaigns/:id/donate
+/donor/donations
+/donor/donations/:id
+/donor/upcoming
+/donor/saved
+/donor/notifications
+/donor/profile
+/donor/settings
+
+ADMIN PORTAL:
+
+/admin/dashboard
+/admin/campaigns
+/admin/campaigns/new
+/admin/campaigns/:id
+/admin/campaigns/:id/donations
+/admin/campaigns/:id/expenses
+/admin/campaigns/:id/approvals
+/admin/campaigns/:id/transactions
+/admin/campaigns/:id/audit
+/admin/verification
+/admin/reports
+/admin/notifications
+/admin/settings
+
+Every route must be implemented.
+
+No "Coming Soon" pages.
+
+==================================================
+10. PUBLIC LANDING PAGE
+==================================================
+
+Route:
+
+/
+
+Hero:
+
+DONOR LENS
+
+"See where every contribution goes."
+
+Supporting text:
+
+"Transparent community giving with verifiable donations, controlled spending, supporting evidence, and accountable campaign management."
+
+Primary CTA:
+
+Explore campaigns
+
+Secondary CTA:
+
+Verify a donation
+
+Show a real application interface preview.
+
+Do NOT use an illustration.
+
+The preview should show:
+
+₹2,48,500 raised
+₹1,82,300 spent
+₹66,200 remaining
+
+with:
+
+87 verified donations
+23 recorded expenses
+100% reconciliation
+
+Then show:
+
+HOW IT WORKS
+
+01 — Discover
+Find a verified community campaign.
+
+02 — Contribute
+Make a donation and receive a transaction record.
+
+03 — Track
+See how funds are allocated and spent.
+
+04 — Verify
+Independently verify the financial record.
+
+Then:
+
+Upcoming campaigns.
+
+Then:
+
+Featured campaigns.
+
+Then:
+
+"Built for accountability."
+
+Show:
+
+Verified donations
+Receipt evidence
+Official approvals
+Blockchain records
+Public verification
+
+Then final CTA.
+
+==================================================
+11. DONOR PORTAL — DASHBOARD
+==================================================
+
+Route:
+
+/donor/dashboard
+
+This must be one of the strongest pages.
+
+Header:
+
+"Good evening."
+
+Subtitle:
+
+"Here's what's happening across your contributions."
+
+Top financial metrics:
+
+Total donated
+Verified donations
+Campaigns supported
+Active campaigns
+
+Use large but restrained numbers.
+
+Then include AT LEAST TWO LARGE CHARTS.
+
+CHART 1:
+
+Donation activity over time.
+
+Line or area chart.
+
+Show:
+
+January
+February
+March
+April
+May
+June
+
+Values representing donation activity.
+
+Title:
+
+"Your contribution activity"
+
+Subtitle:
+
+"Total contributions over the last 6 months"
+
+CHART 2:
+
+Donation allocation / campaign distribution.
+
+Use a clean donut or horizontal bar chart.
+
+Example:
+
+Education
+Healthcare
+Food relief
+Community development
+Emergency relief
+
+Title:
+
+"Where your contributions go"
+
+Subtitle:
+
+"Distribution across supported campaigns"
+
+Do NOT use chart soup.
+
+These two charts must be visually prominent.
+
+Then:
+
+UPCOMING CAMPAIGNS
+
+Show at least 3 upcoming campaigns.
+
+Each should display:
+
+Campaign name
+Start date
+Goal
+Organizer
+Category
+Expected impact
+
+Example:
+
+"Community Library Expansion"
+
+"Student Emergency Fund"
+
+"Flood Relief Preparedness"
+
+"Rural Computer Access"
+
+Include:
+
+"View campaign"
+
+Then:
+
+RECENT DONATIONS
+
+Columns:
+
+Campaign
+Amount
+Date
+Status
+Verification
+
+Then:
+
+DONATION VERIFICATION HEALTH
+
+Show:
+
+Verified
+Pending
+Requires attention
+
+Then:
+
+Recent activity timeline.
+
+==================================================
+12. DONOR PORTAL — EXPLORE
+==================================================
+
+Route:
+
+/donor/explore
+
+Title:
+
+"Discover campaigns"
+
+Search.
+
+Filters:
+
+Category
+Status
+Deadline
+Funding progress
+Official verification
+
+Campaign cards:
+
+Campaign title
+Organizer
+Officially verified badge
+Goal
+Raised
+Progress
+Deadline
+Donors
+Category
+
+Statuses:
+
+Open
+Nearly funded
+Completed
+Upcoming
+
+Add:
+
+"Verified by official"
+
+to verified campaigns.
+
+==================================================
+13. DONOR CAMPAIGN DETAIL
+==================================================
+
+Route:
+
+/donor/campaigns/:id
+
+This should be highly polished.
+
+Header:
+
+Campaign name
+
+Officially verified
+
+Organizer
+
+Campaign status
+
+Financial summary:
+
+Goal
+Raised
+Spent
+Remaining
+
+Large progress bar.
+
+Primary CTA:
+
+Donate now
+
+Secondary:
+
+Track spending
+
+Sections:
+
+About
+Impact
+Financial progress
+Donations
+Expenses
+Receipts
+Verification
+
+Show expense transparency.
+
+Table:
+
+Date
+Category
+Description
+Amount
+Official approval
+Receipt
+Verification
+
+Show:
+
+MATCHES BLOCKCHAIN
+
+Recorded balance
+Indexed balance
+Difference
+
+Difference:
+
+₹0
+
+==================================================
+14. DONATION FLOW
+==================================================
+
+Route:
+
+/donor/campaigns/:id/donate
+
+Donation amounts:
+
+₹500
+₹1,000
+₹2,500
+₹5,000
+Custom
+
+Optional message.
+
+Anonymous donation toggle.
+
+Show:
+
+Donation
+Network fee
+Total
+
+Button:
+
+Continue
+
+Then simulated wallet confirmation.
+
+Show:
+
+Wallet connected
+
+Then:
+
+Transaction submitted
+
+Then:
+
+Transaction confirming
+
+Then:
+
+Donation confirmed
+
+Show transaction hash.
+
+Example:
+
+op7f92c1a...
+
+Show:
+
+View transaction
+View verification
+
+==================================================
+15. DONOR DONATION HISTORY
+==================================================
+
+Route:
+
+/donor/donations
+
+Title:
+
+"My contributions"
+
+Top summary:
+
+Total donated
+Verified
+Pending
+Campaigns supported
+
+Filters:
+
+Campaign
+Date
+Status
+Category
+
+Table:
+
+Campaign
+Amount
+Date
+Status
+Transaction
+Verification
+
+Clicking a donation opens the detail page.
+
+==================================================
+16. DONATION DETAIL
+==================================================
+
+Route:
+
+/donor/donations/:id
+
+Show:
+
+DONATION VERIFIED
+
+Amount
+
+Campaign
+
+Date
+
+Wallet
+
+Transaction hash
+
+Block
+
+Network
+
+Then a timeline:
+
+Donation initiated
+Transaction submitted
+Blockchain confirmed
+Officially indexed
+Donation verified
+
+Then:
+
+Campaign financial impact.
+
+Show how the donation contributes to the campaign.
+
+==================================================
+17. UPCOMING CAMPAIGNS
+==================================================
+
+Route:
+
+/donor/upcoming
+
+This page is specifically for future campaigns.
+
+Show:
+
+Upcoming community initiatives.
+
+Each campaign:
+
+Launch date
+Organizer
+Goal
+Category
+Expected impact
+Early interest
+
+Allow:
+
+Save campaign
+
+Notify me
+
+View details
+
+Show calendar-style or timeline-style presentation.
+
+==================================================
+18. DONOR SAVED CAMPAIGNS
+==================================================
+
+Route:
+
+/donor/saved
+
+Show saved campaigns.
+
+Include upcoming and active campaigns.
+
+==================================================
+19. DONOR PROFILE
+==================================================
+
+Route:
+
+/donor/profile
+
+Show:
+
+Name
+Email
+Wallet
+Member since
+Total donated
+Campaigns supported
+Verified donations
+
+Privacy options.
+
+Anonymous donation preference.
+
+==================================================
+20. DONOR NOTIFICATIONS
+==================================================
+
+Route:
+
+/donor/notifications
+
+Examples:
+
+Donation confirmed
+Campaign reached 80%
+New campaign available
+Expense approved
+Campaign completed
+Verification completed
+
+Group:
+
+Today
+Yesterday
+Earlier
+
+==================================================
+21. ADMIN PORTAL — DASHBOARD
+==================================================
+
+Route:
+
+/admin/dashboard
+
+This is the central administration panel.
+
+It must feel substantially more advanced than the donor dashboard.
+
+Sidebar:
+
+Overview
+Campaigns
+Donations
+Expenses
+Approvals
+Verification
+Transactions
+Audit
+Reports
+Notifications
+Settings
+
+Header:
+
+"Administration"
+
+Show:
+
+Network status
+Blockchain sync status
+Admin wallet
+Profile
+
+TOP METRICS:
+
+Total funds raised
+Active campaigns
+Pending verification
+Pending approvals
+Total expenses
+Reconciled balance
+
+Then AT LEAST TWO LARGE CHARTS.
+
+CHART 1:
+
+"Donation volume"
+
+Line chart showing donations over time.
+
+Show:
+
+Daily / weekly / monthly toggle.
+
+CHART 2:
+
+"Fund allocation"
+
+Donut/bar chart showing:
+
+Education
+Healthcare
+Food
+Infrastructure
+Emergency relief
+Operations
+
+Then add:
+
+CHART 3:
+
+"Campaign performance"
+
+Horizontal bar chart comparing:
+
+Goal
+Raised
+Spent
+Remaining
+
+Then:
+
+CHART 4:
+
+"Expense trend"
+
+Monthly spending trend.
+
+These charts should be arranged intelligently.
+
+Do not make a wall of charts.
+
+Use 2 primary charts above the fold and additional charts lower on the page.
+
+Then:
+
+PENDING ACTIONS
+
+Show:
+
+24 donations awaiting verification
+7 expenses awaiting approval
+3 receipts requiring review
+1 transaction requiring retry
+
+Then:
+
+RECENT DONATIONS
+
+Show donation verification statuses.
+
+Then:
+
+RECENT BLOCKCHAIN ACTIVITY
+
+Show transactions.
+
+Then:
+
+CAMPAIGN HEALTH
+
+Campaigns with:
+
+Healthy
+Attention
+Critical
+
+==================================================
+22. ADMIN — CAMPAIGNS
+==================================================
+
+Route:
+
+/admin/campaigns
+
+Show all campaigns.
+
+Tabs:
+
+Active
+Upcoming
+Completed
+Archived
+
+Each campaign:
+
+Campaign
+Organizer
+Goal
+Raised
+Spent
+Remaining
+Donors
+Status
+Verification
+
+Actions:
+
+View
+Edit
+Manage
+Audit
+
+==================================================
+23. ADMIN — CREATE CAMPAIGN
+==================================================
+
+Route:
+
+/admin/campaigns/new
+
+Multi-step creation.
+
+STEP 1:
+
+Campaign information
+
+Title
+Description
+Category
+Location
+Organizer
+
+STEP 2:
+
+Funding
+
+Goal
+Start date
+Deadline
+
+STEP 3:
+
+Governance
+
+Spending limit
+Minimum approvers
+Expense categories
+
+STEP 4:
+
+Verification rules
+
+Official reviewer
+Receipt required
+Multi-approval required
+Public transparency enabled
+
+STEP 5:
+
+Review
+
+Show complete campaign summary.
+
+Button:
+
+"Create campaign"
+
+Simulate:
+
+Campaign contract initialized.
+
+Show fake Tezos contract address.
+
+==================================================
+24. ADMIN — CAMPAIGN MANAGEMENT
+==================================================
+
+Route:
+
+/admin/campaigns/:id
+
+Tabs:
+
+Overview
+Donations
+Expenses
+Approvals
+Transactions
+Audit
+
+Overview:
+
+Goal
+Raised
+Spent
+Remaining
+
+Spending limit
+
+Pending expenses
+
+Verification status
+
+Blockchain reconciliation
+
+Include TWO charts on this campaign page:
+
+1. Funding progress over time
+2. Expense distribution by category
+
+Then:
+
+Recent donations.
+
+Recent expenses.
+
+Campaign health.
+
+==================================================
+25. ADMIN — DONATION VERIFICATION
+==================================================
+
+Route:
+
+/admin/campaigns/:id/donations
+
+This is extremely important.
+
+Administrators must verify donations.
+
+Show:
+
+DONATION VERIFICATION QUEUE
+
+Columns:
+
+Donor
+Amount
+Campaign
+Timestamp
+Transaction
+Blockchain status
+Official verification
+Action
+
+Statuses:
+
+Pending
+Verified
+Rejected
+Needs review
+
+Each donation can be opened.
+
+Verification detail:
+
+Transaction exists
+Amount matches
+Wallet valid
+Campaign association valid
+Blockchain confirmation exists
+
+Admin action:
+
+Verify donation
+
+or:
+
+Reject
+
+or:
+
+Request review
+
+Once verified:
+
+Status changes to:
+
+OFFICIALLY VERIFIED
+
+This should be visually distinct from merely blockchain-confirmed.
+
+Important distinction:
+
+BLOCKCHAIN CONFIRMED
+
+means the blockchain transaction exists.
+
+OFFICIALLY VERIFIED
+
+means the authorized official has reviewed and accepted the record.
+
+Both states should be displayed.
+
+==================================================
+26. ADMIN — EXPENSE MANAGEMENT
+==================================================
+
+Route:
+
+/admin/campaigns/:id/expenses
+
+Show:
+
+Total spent
+Pending expenses
+Approved expenses
+Rejected expenses
+
+Button:
+
+Submit expense
+
+Expense form:
+
+Amount
+Category
+Description
+Vendor
+Date
+Receipt
+
+Receipt preview.
+
+Categories:
+
+Food
+Transport
+Medical
+Equipment
+Education
+Operations
+Other
+
+Table:
+
+Expense
+Category
+Amount
+Submitted
+Receipt
+Approvals
+Status
+Transaction
+
+==================================================
+27. ADMIN — APPROVAL CENTER
+==================================================
+
+Route:
+
+/admin/campaigns/:id/approvals
+
+Show:
+
+Pending approvals.
+
+Example:
+
+₹24,500
+Equipment purchase
+
+2 / 3 approvals
+
+Approvers:
+
+Treasurer — Approved
+Project Lead — Approved
+Auditor — Pending
+
+Actions:
+
+Approve
+Reject
+Request correction
+
+After final approval:
+
+Expense becomes:
+
+APPROVED
+
+Then simulate blockchain recording.
+
+==================================================
+28. ADMIN — TRANSACTIONS
+==================================================
+
+Route:
+
+/admin/campaigns/:id/transactions
+
+Create a professional transaction explorer.
+
+Filters:
+
+Donation
+Expense
+Correction
+Campaign contract
+
+Columns:
+
+Transaction
+Type
+Amount
+Wallet
+Block
+Timestamp
+Status
+Verification
+
+Hashes must use monospace.
+
+Show:
+
+Tezos testnet
+
+Button:
+
+View on TzKT
+
+Use realistic mock TzKT information.
+
+==================================================
+29. ADMIN — AUDIT TRAIL
+==================================================
+
+Route:
+
+/admin/campaigns/:id/audit
+
+This should be one of the strongest pages.
+
+Title:
+
+"Audit trail"
+
+Timeline:
+
+Campaign created
+Campaign verified
+Donation received
+Donation officially verified
+Expense submitted
+Receipt uploaded
+Receipt anchored
+Approval granted
+Expense recorded
+Balance reconciled
+
+Each record:
+
+Timestamp
+Actor
+Action
+Transaction
+Evidence
+
+Also show:
+
+CORRECTION HISTORY
+
+Never overwrite old records.
+
+Instead:
+
+Original record
+Correction
+Reason
+Timestamp
+Author
+
+Clearly communicate:
+
+APPEND-ONLY RECORDING
+
+==================================================
+30. ADMIN — VERIFICATION CENTER
+==================================================
+
+Route:
+
+/admin/verification
+
+Create a dedicated verification control center.
+
+Top:
+
+Verification health
+
+Show:
+
+Verified
+Pending
+Needs review
+Rejected
+
+Then:
+
+Verification queue.
+
+Allow admins to verify:
+
+Donations
+Expenses
+Receipts
+Campaign records
+
+Show:
+
+Blockchain status
+
+Official verification status
+
+Database status
+
+IPFS status
+
+==================================================
+31. ADMIN — REPORTS
+==================================================
+
+Route:
+
+/admin/reports
+
+Create a professional reporting dashboard.
+
+Reports:
+
+Campaign financial report
+Donation report
+Expense report
+Verification report
+Audit report
+
+Show:
+
+Date range
+
+Campaign selector
+
+Generate report
+
+Simulate PDF generation.
+
+Show:
+
+"Report generated"
+
+with:
+
+Download PDF
+
+QR verification code.
+
+==================================================
+32. PUBLIC VERIFY
+==================================================
+
+Route:
+
+/verify
+
+Title:
+
+"Verify a donation or expense"
+
+Subtitle:
+
+"Independently verify a financial record."
+
+Search:
+
+Campaign ID
+Transaction hash
+Donation ID
+
+Button:
+
+Verify record
+
+Also show:
+
+Scan QR code
+
+Verification result:
+
+VERIFIED
+
+Checks:
+
+Transaction exists
+Campaign exists
+Amount matches
+Official verification confirmed
+Receipt anchored
+Balance reconciled
+
+Show:
+
+Blockchain record
+Official record
+Database record
+Difference
+
+Difference:
+
+₹0
+
+==================================================
+33. VERIFICATION DETAIL
+==================================================
+
+Route:
+
+/verify/:transactionId
+
+Header:
+
+VERIFIED
+
+Transaction hash
+
+Network:
+
+Tezos testnet
+
+Block
+
+Timestamp
+
+Amount
+
+Type
+
+Campaign
+
+Wallet
+
+Then:
+
+Verification checks.
+
+Use green checkmarks.
+
+Show:
+
+Blockchain confirmation
+
+Official verification
+
+Receipt verification
+
+Financial reconciliation
+
+Then receipt preview.
+
+==================================================
+34. RECEIPT / IPFS
+==================================================
+
+Every approved expense may contain a receipt.
+
+Show:
+
+Receipt_2026_001.pdf
+
+IPFS CID:
+
+bafybeig...
+
+States:
+
+Uploaded
+Pinned
+Hash generated
+Anchored on-chain
+
+Receipt should open in a modal preview.
+
+==================================================
+35. NOTIFICATIONS
+==================================================
+
+Create notification systems for both roles.
+
+Donor:
+
+Donation confirmed
+Campaign update
+Campaign completed
+Verification complete
+
+Admin:
+
+Donation awaiting verification
+Expense awaiting approval
+Receipt requires review
+Blockchain synchronization issue
+Transaction failure
+Campaign nearing deadline
+
+==================================================
+36. DATA MODEL
+==================================================
+
+Create a centralized mock data layer.
+
+Campaign:
+
+campaignId
+title
+description
+category
+organizer
+goal
+raised
+spent
+remaining
+startDate
+deadline
+status
+verificationStatus
+contractAddress
+
+Donation:
+
+donationId
+donor
+amount
+campaignId
+timestamp
+wallet
+txHash
+block
+status
+officialVerification
+network
+
+Expense:
+
+expenseId
+campaignId
+amount
+category
+description
+vendor
+date
+receiptCID
+status
+approvers
+txHash
+
+Approval:
+
+approvalId
+expenseId
+approver
+role
+status
+timestamp
+
+Audit:
+
+auditId
+actor
+action
+timestamp
+txHash
+entity
+description
+
+==================================================
+37. STATE SIMULATION
+==================================================
+
+Implement realistic simulated state changes.
+
+DONATION:
+
+Pending
+→ Submitted
+→ Confirmed
+→ Indexed
+→ Officially Verified
+
+EXPENSE:
+
+Draft
+→ Submitted
+→ Pending Approval
+→ Approved
+→ Recorded
+→ Reconciled
+
+FAILED TRANSACTION:
+
+Pending
+→ Failed
+→ Retry
+→ Confirmed
+
+Buttons must trigger these transitions.
+
+==================================================
+38. DASHBOARD CHART REQUIREMENTS
+==================================================
+
+This is mandatory.
+
+DONOR DASHBOARD must have at least:
+
+1. Contribution activity chart
+2. Donation category distribution chart
+
+ADMIN DASHBOARD must have at least:
+
+1. Donation volume chart
+2. Fund allocation chart
+3. Campaign performance chart
+4. Expense trend chart
+
+CAMPAIGN ADMIN PAGE must have at least:
+
+1. Funding progress chart
+2. Expense category chart
+
+Use Recharts.
+
+Charts should have:
+
+- clean axes
+- useful labels
+- tooltips
+- responsive sizing
+- realistic data
+- minimal visual clutter
+
+Do NOT create meaningless decorative charts.
+
+==================================================
+39. UPCOMING CAMPAIGNS
+==================================================
+
+Upcoming campaigns must be prominent in the donor experience.
+
+Show them on:
+
+Donor dashboard
+Explore
+Upcoming campaigns page
+
+Example campaigns:
+
+"Student Emergency Assistance Fund"
+
+"Community Library Expansion"
+
+"Flood Relief Preparedness Drive"
+
+"Rural Digital Learning Initiative"
+
+"Community Health Camp"
+
+Each should show:
+
+Launch date
+Funding goal
+Organizer
+Category
+Expected impact
+Official status
+
+==================================================
+40. OFFICIAL VERIFICATION SYSTEM
+==================================================
+
+This is a core concept.
+
+A donation should NOT automatically become officially verified simply because it exists on-chain.
+
+Use two separate statuses:
+
+BLOCKCHAIN STATUS:
+
+Pending
+Confirmed
+Failed
+
+OFFICIAL STATUS:
+
+Pending Review
+Verified
+Rejected
+Needs Review
+
+Example:
+
+Blockchain:
+
+CONFIRMED
+
+Official:
+
+PENDING REVIEW
+
+After an admin verifies it:
+
+Blockchain:
+
+CONFIRMED
+
+Official:
+
+VERIFIED
+
+This distinction must appear throughout the UI.
+
+==================================================
+41. DEMO MODE
+==================================================
+
+Add:
+
+DEMO MODE
+
+indicator in the interface.
+
+Create:
+
+Demo Student account.
+
+Demo Admin account.
+
+The evaluator should be able to switch between them.
+
+Student demo:
+
+student@donorlens.demo
+
+Admin demo:
+
+admin@donorlens.demo
+
+Do not implement real credentials.
+
+==================================================
+42. RESPONSIVE DESIGN
+==================================================
+
+Desktop:
+
+Use sidebar navigation.
+
+Tablet:
+
+Compact sidebar.
+
+Mobile:
+
+Bottom navigation or compact drawer.
+
+Tables should become:
+
+responsive cards
+or
+horizontal scrolling containers.
+
+Do not make text unreadable.
+
+==================================================
+43. COMPONENT ARCHITECTURE
+==================================================
+
+Create reusable components:
+
+AppShell
+DonorShell
+AdminShell
+Sidebar
+Topbar
+MobileNav
+CampaignCard
+UpcomingCampaignCard
+MetricCard
+FinancialCard
+ChartCard
+DonationTable
+ExpenseTable
+TransactionTable
+VerificationBadge
+OfficialVerificationBadge
+BlockchainStatus
+ApprovalProgress
+AuditTimeline
+ReceiptPreview
+WalletButton
+VerifyPanel
+NotificationItem
+Modal
+Toast
+FilterBar
+SearchBar
+EmptyState
+LoadingState
+ErrorState
+ProgressBar
+CampaignHealth
+RoleSelector
+
+Do not put everything into one component.
+
+==================================================
+44. PROJECT STRUCTURE
+==================================================
+
+Use:
+
+React
+TypeScript
+Vite
+React Router
+Tailwind CSS
+Lucide Icons
+Recharts
+
+Structure:
+
+src/
+  components/
+  pages/
+    public/
+    auth/
+    donor/
+    admin/
+  layouts/
+  data/
+  hooks/
+  lib/
+  types/
+  utils/
+
+Keep mock data centralized.
+
+Do not put the entire application inside App.tsx.
+
+==================================================
+45. UI STATES
+==================================================
+
+Every important system must have:
+
+Loading
+Success
+Empty
+Error
+Pending
+
+Examples:
+
+No campaigns
+No donations
+No expenses
+Pending donation
+Failed transaction
+Verification failed
+Wallet disconnected
+Receipt unavailable
+Network unavailable
+
+Make these states polished.
+
+==================================================
+46. TRUST VISUALIZATION
+==================================================
+
+Clearly distinguish:
+
+DATABASE
+
+APPLICATION DATA
+
+BLOCKCHAIN
+
+AUTHORITATIVE TRANSACTION
+
+IPFS
+
+SUPPORTING EVIDENCE
+
+TZKT
+
+BLOCKCHAIN INDEXING
+
+Use small labels:
+
+ON-CHAIN
+OFF-CHAIN
+IPFS
+INDEXED
+VERIFIED
+OFFICIAL
+
+Do not claim that database records are immutable.
+
+==================================================
+47. LANDING PAGE VISUAL
+==================================================
+
+The hero should show an actual miniature Donor Lens dashboard.
+
+Example:
+
+₹2,48,500
+Total raised
+
+₹1,82,300
+Verified spending
+
+₹66,200
+Remaining
+
+87
+Verified donations
+
+Then a small chart.
+
+Then:
+
+MATCHES BLOCKCHAIN
+
+This communicates the product immediately.
+
+==================================================
+48. DESIGN QUALITY RULES
+==================================================
+
+CRITICAL:
+
+This must NOT look AI-generated.
+
+Avoid:
+
+- excessive cards
+- repetitive cards
+- giant text
+- excessive rounded rectangles
+- random gradients
+- purple AI gradients
+- glassmorphism
+- excessive neon
+- random illustrations
+- unnecessary icons
+- emojis
+- stock photos
+- crypto coin imagery
+- fake futuristic interfaces
+- excessive shadows
+- generic SaaS copy
+
+Do not use lorem ipsum.
+
+Use realistic copy everywhere.
+
+Use realistic Indian rupee values.
+
+Use realistic dates.
+
+Use realistic campaign names.
+
+Use realistic transaction hashes.
+
+==================================================
+49. VISUAL SIGNATURE
+==================================================
+
+The final visual identity should be:
+
+Deep black
++
+Soft white typography
++
+Selective neon green
++
+Thin borders
++
+Dense but breathable layouts
++
+Precise financial numbers
++
+Monospace blockchain metadata
++
+Minimal iconography
++
+Subtle animation
+
+It should feel premium and technically credible.
+
+Think:
+
+modern fintech infrastructure
++
+institutional accountability
++
+blockchain verification
+
+Do NOT copy Stripe, Linear, Vercel, or any other existing product.
+
+Create an original Donor Lens identity.
+
+==================================================
+50. FINAL USER JOURNEY
+==================================================
+
+The prototype must support this complete demonstration:
+
+LANDING
+
+↓
+
+SIGN UP
+
+↓
+
+Choose:
+
+STUDENT / DONOR
+
+↓
+
+DONOR DASHBOARD
+
+↓
+
+See:
+
+Donation charts
+Upcoming campaigns
+Recent donations
+Verification health
+
+↓
+
+EXPLORE CAMPAIGNS
+
+↓
+
+Open campaign
+
+↓
+
+View:
+
+Goal
+Raised
+Spending
+Receipts
+Official verification
+
+↓
+
+DONATE
+
+↓
+
+Transaction:
+
+Pending
+
+↓
+
+Blockchain:
+
+Confirmed
+
+↓
+
+Official:
+
+Pending Review
+
+↓
+
+ADMIN LOGIN
+
+↓
+
+ADMIN DASHBOARD
+
+↓
+
+Donation appears in:
+
+Verification Queue
+
+↓
+
+Admin reviews transaction
+
+↓
+
+Admin clicks:
+
+VERIFY DONATION
+
+↓
+
+Official status:
+
+VERIFIED
+
+↓
+
+Donor sees:
+
+OFFICIALLY VERIFIED
+
+↓
+
+Admin creates expense
+
+↓
+
+Uploads receipt
+
+↓
+
+Expense:
+
+Pending Approval
+
+↓
+
+Multiple officials approve
+
+↓
+
+Expense:
+
+Approved
+
+↓
+
+Receipt:
+
+IPFS Anchored
+
+↓
+
+Transaction:
+
+Recorded
+
+↓
+
+Campaign balance updates
+
+↓
+
+Public user visits:
+
+VERIFY
+
+↓
+
+Enters transaction hash
+
+↓
+
+Result:
+
+VERIFIED
+
+↓
+
+Shows:
+
+Blockchain record
+Official verification
+Receipt
+Financial reconciliation
+
+This entire journey must work in the prototype.
+
+==================================================
+51. FINAL REQUIREMENT
+==================================================
+
+Do not stop at the landing page.
+
+Do not create only a dashboard.
+
+Do not create static screenshots.
+
+Build the complete clickable prototype.
+
+I should be able to demonstrate BOTH products:
+
+DONOR LENS — DONOR PORTAL
+
+and
+
+DONOR LENS — ADMIN PORTAL
+
+from the same application.
+
+The role selected during signup must determine which portal the user enters.
+
+The donor portal must prioritize:
+
+Discovery
+Upcoming campaigns
+Donations
+Tracking
+Verification
+Transparency
+
+The admin portal must prioritize:
+
+Campaign management
+Donation verification
+Expense management
+Approvals
+Blockchain reconciliation
+Audit
+Reports
+
+Every page must be implemented.
+
+Every important button must work.
+
+Every major state must change.
+
+Every dashboard must contain meaningful charts.
+
+The donor dashboard must contain at least TWO charts.
+
+The admin dashboard must contain at least FOUR meaningful charts.
+
+Upcoming campaigns must be prominently displayed.
+
+Donations must have BOTH:
+
+Blockchain confirmation
+
+and
+
+Official verification.
+
+The final result should look like a real product that could be demonstrated to:
+
+college administrators
+NGOs
+community organizations
+donors
+students
+technical judges
+investors
+
+It should feel like a serious financial accountability platform.
+
+Not a student dashboard.
+
+Not a crypto dashboard.
+
+Not an AI-generated template.
+
+It should feel like a polished first version of a real product.
+
+Build the entire prototype now.
