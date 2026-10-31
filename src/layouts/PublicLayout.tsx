@@ -4,11 +4,11 @@ import { BrandLogo } from '../components/common/BrandLogo';
 import { DemoBanner } from '../components/common/DemoBanner';
 import { ReceiptModal } from '../components/receipt/ReceiptModal';
 import { TzktModal } from '../components/tx/TzktModal';
-import { ShieldCheck, Search, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Search, ArrowRight, CheckCircle2, Sun, Moon } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const PublicLayout: React.FC = () => {
-  const { currentRole } = useApp();
+  const { currentRole, theme, toggleTheme } = useApp();
   const location = useLocation();
 
   const navLinks = [
@@ -42,6 +42,14 @@ export const PublicLayout: React.FC = () => {
 
           {/* Action CTAs */}
           <div className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="p-1.5 rounded-lg bg-[#111612] border border-[#232D27] text-neutral-300 hover:text-white transition-colors cursor-pointer"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-blue-500" />}
+            </button>
+
             <Link
               to="/verify"
               className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono-code border border-[#232D27] hover:border-[#00FF87]/40 text-neutral-300 hover:text-white transition-colors"

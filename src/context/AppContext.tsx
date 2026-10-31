@@ -11,6 +11,7 @@ import {
 } from '../types';
 import {
   DEMO_USERS,
+  ADMIN_COMMITTEE_MEMBERS,
   INITIAL_CAMPAIGNS,
   INITIAL_DONATIONS,
   INITIAL_EXPENSES,
@@ -22,6 +23,8 @@ import {
 interface AppContextType {
   currentUser: UserProfile;
   currentRole: UserRole;
+  activeAdminSigner: UserProfile;
+  adminCommittee: UserProfile[];
   theme: 'dark' | 'light';
   campaigns: Campaign[];
   donations: Donation[];
@@ -33,9 +36,11 @@ interface AppContextType {
   previewReceipt: Expense | null;
   previewTx: TransactionRecord | null;
   switchRole: (role: 'donor' | 'admin') => void;
+  setActiveAdminSigner: (signer: UserProfile) => void;
   login: (email: string, role: 'donor' | 'admin', name?: string) => void;
   logout: () => void;
   toggleTheme: () => void;
+  setThemeMode: (mode: 'dark' | 'light') => void;
   toggleSaveCampaign: (campaignId: string) => void;
   createDonation: (data: { campaignId: string; amount: number; message?: string; isAnonymous: boolean }) => Donation;
   verifyDonation: (donationId: string, notes?: string) => void;
@@ -50,6 +55,11 @@ interface AppContextType {
     receiptFileName: string;
   }) => Expense;
   approveExpense: (expenseId: string, approverName?: string) => void;
+  approveAdminSignature: (
+    expenseId: string,
+    signerNameOrId: string,
+    signerProfile?: UserProfile
+  ) => { success: boolean; isQuorumReached: boolean; message: string };
   rejectExpense: (expenseId: string, reason?: string) => void;
   createCampaign: (data: Partial<Campaign>) => Campaign;
   markNotificationRead: (id: string) => void;
@@ -66,7 +76,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return DEMO_USERS.donor;
   });
 
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [activeAdminSigner, setActiveAdminSigner] = useState<UserProfile>(() => {
+    const savedId = localStorage.getItem('dl_active_signer');
+    const matched = ADMIN_COMMITTEE_MEMBERS.find(m => m.id === savedId);
+    return matched || ADMIN_COMMITTEE_MEMBERS[0];
+  });
+
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const savedTheme = localStorage.getItem('dl_theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
+    return 'dark';
+  });
+
   const [campaigns, setCampaigns] = useState<Campaign[]>(INITIAL_CAMPAIGNS);
   const [donations, setDonations] = useState<Donation[]>(INITIAL_DONATIONS);
   const [expenses, setExpenses] = useState<Expense[]>(INITIAL_EXPENSES);
@@ -86,15 +107,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       root.classList.add('light');
       root.classList.remove('dark');
     }
+    localStorage.setItem('dl_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+    setTheme(prev => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('dl_theme', next);
+      return next;
+    });
+  };
+
+  const setThemeMode = (mode: 'dark' | 'light') => {
+    setTheme(mode);
+    localStorage.setItem('dl_theme', mode);
+  };
+
+  const handleSetActiveAdminSigner = (signer: UserProfile) => {
+    setActiveAdminSigner(signer);
+    localStorage.setItem('dl_active_signer', signer.id);
+    if (currentUser.role === 'admin') {
+      setCurrentUser(signer);
+    }
   };
 
   const switchRole = (role: 'donor' | 'admin') => {
-    const user = DEMO_USERS[role];
-    setCurrentUser(user);
+    if (role === 'admin') {
+      setCurrentUser(activeAdminSigner);
+    } else {
+      setCurrentUser(DEMO_USERS.donor);
+    }
     localStorage.setItem('dl_current_role', role);
   };
 
@@ -362,9 +404,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return newExpense;
   };
 
-  const approveExpense = (expenseId: string, approverName = 'Dr. Priya Sundaram') => {
+  const approveAdminSignature = (
+    expenseId: string,
+    signerNameOrId: string,
+    signerProfile?: UserProfile
+  ): { success: boolean; isQuorumReached: boolean; message: string } => {
     let targetExpense: Expense | undefined;
-    let willBecomeApproved = false;
+    let isQuorumReached = false;
+    let alreadyApproved = false;
+    let notFound = false;
+    let foundApproverName = '';
+    let foundApproverRole = '';
     const randomHex = Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
     const newTxHash = `op${randomHex}`;
     const blockNumber = 4982420 + Math.floor(Math.random() * 30);
@@ -372,9 +422,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setExpenses(prev =>
       prev.map(exp => {
         if (exp.id === expenseId) {
-          // Find pending approver or match current user
-          const updatedApprovers = exp.approvers.map(app => {
-            if (app.status === 'PENDING' && (app.name === approverName || !app.timestamp)) {
+          const targetIndex = exp.approvers.findIndex(
+            a =>
+              a.id === signerNameOrId ||
+              a.name.toLowerCase() === signerNameOrId.toLowerCase() ||
+              a.role.toLowerCase() === signerNameOrId.toLowerCase()
+          );
+
+          if (targetIndex === -1) {
+            notFound = true;
+            return exp;
+          }
+
+          if (exp.approvers[targetIndex].status === 'APPROVED') {
+            alreadyApproved = true;
+            foundApproverName = exp.approvers[targetIndex].name;
+            return exp;
+          }
+
+          const signer = exp.approvers[targetIndex];
+          foundApproverName = signer.name;
+          foundApproverRole = signer.role;
+
+          const updatedApprovers = exp.approvers.map((app, idx) => {
+            if (idx === targetIndex) {
               return {
                 ...app,
                 status: 'APPROVED' as const,
@@ -386,17 +457,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           });
 
           const approvedCount = updatedApprovers.filter(a => a.status === 'APPROVED').length;
-          const isNowApproved = approvedCount >= exp.requiredApprovals;
-          willBecomeApproved = isNowApproved;
+          const quorumMet = approvedCount >= exp.requiredApprovals;
+          isQuorumReached = quorumMet;
 
           targetExpense = {
             ...exp,
             approvers: updatedApprovers,
-            status: isNowApproved ? ('APPROVED' as const) : exp.status,
-            anchoredOnChain: isNowApproved ? true : exp.anchoredOnChain,
-            reconciled: isNowApproved ? true : exp.reconciled,
-            txHash: isNowApproved ? newTxHash : exp.txHash,
-            blockNumber: isNowApproved ? blockNumber : exp.blockNumber,
+            status: quorumMet ? ('APPROVED' as const) : exp.status,
+            anchoredOnChain: quorumMet ? true : exp.anchoredOnChain,
+            reconciled: quorumMet ? true : exp.reconciled,
+            txHash: quorumMet ? newTxHash : exp.txHash,
+            blockNumber: quorumMet ? blockNumber : exp.blockNumber,
           };
           return targetExpense;
         }
@@ -404,8 +475,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       })
     );
 
-    // If fully approved, deduct from campaign remaining & add to spent!
-    if (willBecomeApproved && targetExpense) {
+    if (alreadyApproved) {
+      return {
+        success: false,
+        isQuorumReached: false,
+        message: `${foundApproverName} has already recorded their signature for this voucher.`,
+      };
+    }
+
+    if (notFound || !targetExpense) {
+      return {
+        success: false,
+        isQuorumReached: false,
+        message: 'Disbursement voucher or designated committee approver was not found.',
+      };
+    }
+
+    const currentApprovedCount = targetExpense.approvers.filter(a => a.status === 'APPROVED').length;
+
+    if (isQuorumReached) {
       const exp = targetExpense;
       setCampaigns(prev =>
         prev.map(c => {
@@ -424,7 +512,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         })
       );
 
-      // Add expense transaction
       const expTx: TransactionRecord = {
         id: `tx_${Date.now()}`,
         txHash: newTxHash,
@@ -432,7 +519,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         amount: exp.amount,
         campaignId: exp.campaignId,
         campaignTitle: exp.campaignTitle,
-        walletAddress: currentUser.walletAddress,
+        walletAddress: signerProfile?.walletAddress || currentUser.walletAddress,
         blockNumber,
         timestamp: new Date().toISOString(),
         status: 'CONFIRMED',
@@ -442,33 +529,75 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       setTransactions(prev => [expTx, ...prev]);
 
-      // Append to audit log
       const auditEntry: AuditRecord = {
         id: `aud_${Date.now()}`,
         timestamp: new Date().toISOString(),
-        actor: 'Multi-Sig Quorum',
-        actorRole: 'Oversight Committee',
-        action: 'Expense Approved & Anchored On-Chain',
+        actor: `${foundApproverName} (${foundApproverRole})`,
+        actorRole: foundApproverRole,
+        action: 'Multi-Sig Quorum Finalized & Vault Disbursed',
         entityType: 'EXPENSE',
         entityId: exp.id,
         txHash: newTxHash,
         evidenceCID: exp.receiptCID,
-        description: `Disbursement of ₹${exp.amount.toLocaleString('en-IN')} approved by multi-sig quorum. Anchored to Tezos block #${blockNumber}. Reconciled balance updated.`,
+        description: `Disbursement of ₹${exp.amount.toLocaleString('en-IN')} officially authorized. Final signature verified by ${foundApproverName}. Consensus (3 of 3 signatures) achieved. Anchored to Tezos Ghostnet block #${blockNumber}.`,
       };
       setAuditLog(prev => [auditEntry, ...prev]);
 
-      // Notify donor & community
       const notif: AppNotification = {
         id: `notif_${Date.now()}`,
         targetRole: 'all',
-        title: 'Campaign Expense Approved',
-        description: `₹${exp.amount.toLocaleString('en-IN')} for "${exp.description}" approved and anchored on-chain with IPFS receipt.`,
+        title: 'Multi-Sig Escrow Released',
+        description: `Voucher #${exp.id} (₹${exp.amount.toLocaleString('en-IN')}) finalized with all 3 signatures. Funds disbursed & anchored on-chain.`,
         timestamp: new Date().toISOString(),
         read: false,
         type: 'expense',
       };
       setNotifications(prev => [notif, ...prev]);
+
+      return {
+        success: true,
+        isQuorumReached: true,
+        message: `Quorum reached! All ${exp.requiredApprovals} admins approved. Escrow released & anchored on-chain.`,
+      };
+    } else {
+      const exp = targetExpense;
+      const remainingNeeded = exp.requiredApprovals - currentApprovedCount;
+
+      const auditEntry: AuditRecord = {
+        id: `aud_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        actor: `${foundApproverName} (${foundApproverRole})`,
+        actorRole: foundApproverRole,
+        action: 'Multi-Sig Signature Appended',
+        entityType: 'APPROVAL',
+        entityId: exp.id,
+        description: `Cryptographic approval signature appended by ${foundApproverName} (${foundApproverRole}) for voucher #${exp.id}. [${currentApprovedCount}/${exp.requiredApprovals} signatures gathered].`,
+      };
+      setAuditLog(prev => [auditEntry, ...prev]);
+
+      const adminNotif: AppNotification = {
+        id: `notif_${Date.now()}`,
+        targetRole: 'admin',
+        title: `Signature Added: ${foundApproverName}`,
+        description: `Signature appended to voucher #${exp.id} (₹${exp.amount.toLocaleString('en-IN')}). Awaiting ${remainingNeeded} more signature(s).`,
+        timestamp: new Date().toISOString(),
+        read: false,
+        type: 'approval',
+        link: `/admin/campaigns/${exp.campaignId}/approvals`,
+      };
+      setNotifications(prev => [adminNotif, ...prev]);
+
+      return {
+        success: true,
+        isQuorumReached: false,
+        message: `Signature recorded for ${foundApproverName}. ${currentApprovedCount}/${exp.requiredApprovals} signatures gathered (${remainingNeeded} pending).`,
+      };
     }
+  };
+
+  const approveExpense = (expenseId: string, approverName?: string) => {
+    const signer = approverName || activeAdminSigner.name;
+    approveAdminSignature(expenseId, signer, activeAdminSigner);
   };
 
   const rejectExpense = (expenseId: string, reason?: string) => {
@@ -477,12 +606,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (exp.id === expenseId) {
           return {
             ...exp,
-            status: 'REJECTED',
+            status: 'REJECTED' as const,
           };
         }
         return exp;
       })
     );
+
+    const auditEntry: AuditRecord = {
+      id: `aud_${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      actor: activeAdminSigner.name,
+      actorRole: 'Multi-Sig Committee Officer',
+      action: 'Expense Disbursement Rejected',
+      entityType: 'EXPENSE',
+      entityId: expenseId,
+      description: `Disbursement voucher #${expenseId} rejected. Reason: ${reason || 'Non-compliant documentation or quote irregularity.'}`,
+    };
+    setAuditLog(prev => [auditEntry, ...prev]);
   };
 
   const createCampaign = (data: Partial<Campaign>): Campaign => {
@@ -549,6 +690,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       value={{
         currentUser,
         currentRole: currentUser.role,
+        activeAdminSigner,
+        adminCommittee: ADMIN_COMMITTEE_MEMBERS,
         theme,
         campaigns,
         donations,
@@ -560,15 +703,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         previewReceipt,
         previewTx,
         switchRole,
+        setActiveAdminSigner: handleSetActiveAdminSigner,
         login,
         logout,
         toggleTheme,
+        setThemeMode,
         toggleSaveCampaign,
         createDonation,
         verifyDonation,
         rejectDonation,
         createExpense,
         approveExpense,
+        approveAdminSignature,
         rejectExpense,
         createCampaign,
         markNotificationRead,

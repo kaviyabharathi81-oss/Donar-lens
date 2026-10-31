@@ -21,10 +21,12 @@ import {
   Menu,
   X,
   LogOut,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 export const DonorLayout: React.FC = () => {
-  const { currentUser, notifications, logout } = useApp();
+  const { currentUser, notifications, logout, theme, toggleTheme } = useApp();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -119,6 +121,13 @@ export const DonorLayout: React.FC = () => {
             <BrandLogo size="sm" />
             <div className="flex items-center gap-2">
               <button
+                onClick={toggleTheme}
+                className="p-1.5 rounded bg-neutral-900 border border-neutral-700 text-neutral-300"
+                title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-blue-500" />}
+              </button>
+              <button
                 onClick={() => navigate('/verify')}
                 className="p-1.5 rounded bg-neutral-900 border border-neutral-700 text-neutral-300"
                 title="Verify Record"
@@ -170,6 +179,25 @@ export const DonorLayout: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3">
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#111612] border border-[#232D27] hover:border-[#00FF87]/40 text-neutral-300 hover:text-white text-xs font-mono-code transition-all cursor-pointer shadow-sm"
+                title={theme === 'dark' ? 'Switch to Clean Light Theme' : 'Switch to Dark Theme'}
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <Sun className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="w-3.5 h-3.5 text-blue-500" />
+                    <span className="text-slate-800 font-semibold">Dark Mode</span>
+                  </>
+                )}
+              </button>
+
               <Link
                 to="/verify"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#111612] border border-[#232D27] hover:border-[#00FF87]/40 text-neutral-300 text-xs font-mono-code transition-colors"

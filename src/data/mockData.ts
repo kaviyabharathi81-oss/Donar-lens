@@ -1,5 +1,41 @@
 import { Campaign, Donation, Expense, TransactionRecord, AuditRecord, AppNotification, UserProfile } from '../types';
 
+export const ADMIN_COMMITTEE_MEMBERS: UserProfile[] = [
+  {
+    id: 'user_admin_01',
+    name: 'Dr. Priya Sundaram',
+    email: 'admin@donorlens.demo',
+    role: 'admin',
+    walletAddress: 'tz1h3rQ8wToHLY5fsXTCCDH3LsnvaQF10D7a',
+    organization: 'Apex Institutional Trust & Oversight Council',
+    department: 'Chief Financial Comptroller & Auditor',
+    memberSince: 'January 2024',
+    anonymousDefault: false,
+  },
+  {
+    id: 'user_admin_02',
+    name: 'Vikram Joshi',
+    email: 'treasurer@donorlens.demo',
+    role: 'admin',
+    walletAddress: 'tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb',
+    organization: 'Apex Institutional Trust & Oversight Council',
+    department: 'Institutional Treasurer & Vault Custodian',
+    memberSince: 'March 2024',
+    anonymousDefault: false,
+  },
+  {
+    id: 'user_admin_03',
+    name: 'Dr. Neha Rao',
+    email: 'projectlead@donorlens.demo',
+    role: 'admin',
+    walletAddress: 'tz1L7Kq89mN2XpW4yV0z8J3cR1b9T5aD4e7F',
+    organization: 'Apex Institutional Trust & Oversight Council',
+    department: 'Project Lead & Governance Directorate',
+    memberSince: 'June 2024',
+    anonymousDefault: false,
+  },
+];
+
 export const DEMO_USERS: Record<'donor' | 'admin', UserProfile> = {
   donor: {
     id: 'user_donor_01',
@@ -12,17 +48,7 @@ export const DEMO_USERS: Record<'donor' | 'admin', UserProfile> = {
     memberSince: 'September 2025',
     anonymousDefault: false,
   },
-  admin: {
-    id: 'user_admin_01',
-    name: 'Dr. Priya Sundaram',
-    email: 'admin@donorlens.demo',
-    role: 'admin',
-    walletAddress: 'tz1h3rQ8wToHLY5fsXTCCDH3LsnvaQF10D7a',
-    organization: 'Apex Institutional Trust & Oversight Council',
-    department: 'Financial Auditing & Verification Cell',
-    memberSince: 'January 2024',
-    anonymousDefault: false,
-  },
+  admin: ADMIN_COMMITTEE_MEMBERS[0],
 };
 
 export const INITIAL_CAMPAIGNS: Campaign[] = [
@@ -352,6 +378,52 @@ export const INITIAL_DONATIONS: Donation[] = [
 
 export const INITIAL_EXPENSES: Expense[] = [
   {
+    id: 'exp_506',
+    campaignId: 'camp_001',
+    campaignTitle: 'Student Emergency Assistance Fund',
+    amount: 15500,
+    category: 'Medical',
+    description: 'Emergency Diagnostic Lab Reagents & Sterile Burn Dressing Kits',
+    vendor: 'Apollo Diagnostics & Clinical Supplies',
+    submittedBy: 'Student Council Welfare Directorate',
+    date: '2026-10-30',
+    receiptCID: 'bafybeifk4v2p7qlmx8j3t1u9z6y4b2c0d8e6f4a2b0c8d6e4f2a0b8c6d',
+    receiptFileName: 'Diagnostic_Supplies_Oct30.pdf',
+    status: 'PENDING_APPROVAL', // 0 of 3 approved! Needs all 3 admins to approve
+    requiredApprovals: 3,
+    approvers: [
+      { id: 'app_1', name: 'Vikram Joshi', role: 'Treasurer', status: 'PENDING' },
+      { id: 'app_2', name: 'Dr. Neha Rao', role: 'Project Lead', status: 'PENDING' },
+      { id: 'app_3', name: 'Dr. Priya Sundaram', role: 'Auditor', status: 'PENDING' },
+    ],
+    anchoredOnChain: false,
+    reconciled: false,
+    ipfsPinned: true,
+  },
+  {
+    id: 'exp_505',
+    campaignId: 'camp_001',
+    campaignTitle: 'Student Emergency Assistance Fund',
+    amount: 38000,
+    category: 'Operations',
+    description: 'Campus Emergency Ambulance Annual Retainer & Trauma Gear Overhaul',
+    vendor: 'State Lifeline EMS Services',
+    submittedBy: 'Student Council Welfare Directorate',
+    date: '2026-10-28',
+    receiptCID: 'bafybeig5v8m2l1k9j0p4q7r2s5t8u1v4w7x0y3z6a9b2c5d8e1f4g7h0i',
+    receiptFileName: 'Ambulance_Retainer_2026.pdf',
+    status: 'PENDING_APPROVAL', // 1 of 3 approved! Vikram Joshi signed, needs Neha Rao & Priya Sundaram
+    requiredApprovals: 3,
+    approvers: [
+      { id: 'app_1', name: 'Vikram Joshi', role: 'Treasurer', status: 'APPROVED', timestamp: '2026-10-28T16:20:00Z', signatureHash: 'sig_0x992cf014b' },
+      { id: 'app_2', name: 'Dr. Neha Rao', role: 'Project Lead', status: 'PENDING' },
+      { id: 'app_3', name: 'Dr. Priya Sundaram', role: 'Auditor', status: 'PENDING' },
+    ],
+    anchoredOnChain: false,
+    reconciled: false,
+    ipfsPinned: true,
+  },
+  {
     id: 'exp_501',
     campaignId: 'camp_001',
     campaignTitle: 'Student Emergency Assistance Fund',
@@ -363,7 +435,7 @@ export const INITIAL_EXPENSES: Expense[] = [
     date: '2026-10-26',
     receiptCID: 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi',
     receiptFileName: 'Receipt_2026_001.pdf',
-    status: 'PENDING_APPROVAL', // 2 of 3 approved! Needs Dr. Priya Sundaram or Auditor
+    status: 'PENDING_APPROVAL', // 2 of 3 approved! Needs Dr. Priya Sundaram
     requiredApprovals: 3,
     approvers: [
       { id: 'app_1', name: 'Vikram Joshi', role: 'Treasurer', status: 'APPROVED', timestamp: '2026-10-27T10:15:00Z', signatureHash: 'sig_0x892a019ef' },
